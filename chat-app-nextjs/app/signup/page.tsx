@@ -15,11 +15,11 @@ export default function SignUpPage() {
     e.preventDefault();
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_CHAT_BE_BASE_URL}/signup`,
+        `${process.env.NEXT_PUBLIC_CHAT_BE_BASE_URL}/v1/users/register`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name, username, password }),
+          body: JSON.stringify({ name, email: username, password }),
         }
       );
       if (response.ok) {

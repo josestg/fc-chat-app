@@ -20,10 +20,10 @@ app.use(express.json());
 const users = new Map();
 const registeredUsers = new Map();
 
-const SECRET_KEY = process.env.JWT_SECRET || 'unsecure key'
+const SECRET_KEY = process.env.JWT_SECRET || 'unsecure secret'
 
-app.post('/signup', async (req, res) => {
-  const { name, username, password } = req.body;
+app.post('/v1/users/register,', async (req, res) => {
+  const { name, email: username, password } = req.body;
   if (registeredUsers.has(username)) {
     return res.status(400).json({ message: 'Username already exists' });
   }
@@ -32,8 +32,8 @@ app.post('/signup', async (req, res) => {
   res.status(201).json({ message: 'User created successfully' });
 });
 
-app.post('/login', async (req, res) => {
-  const { username, password } = req.body;
+app.post('/v1/users/login', async (req, res) => {
+  const { email: username, password } = req.body;
   const user = registeredUsers.get(username);
   if (!user || !(await bcrypt.compare(password, user.hashedPassword))) {
     return res.status(401).json({ message: 'Invalid username or password' });
@@ -49,7 +49,7 @@ io.use((socket, next) => {
   }
   jwt.verify(token, SECRET_KEY, (err, decoded) => {
     if (err) return next(new Error('AUTH_ERROR'));
-    socket.username = decoded.username;
+    socket.username = decoded.email;
     socket.name = decoded.name;
     next();
   });

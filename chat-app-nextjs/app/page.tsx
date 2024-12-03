@@ -14,17 +14,21 @@ export default function LoginPage() {
     e.preventDefault();
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_CHAT_WS_BASE_URL}/login`,
+        `${process.env.NEXT_PUBLIC_CHAT_BE_BASE_URL}/v1/users/login`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ username, password }),
+          body: JSON.stringify({ email: username, password }),
         }
       );
       if (response.ok) {
-        const data = await response.json();
-        localStorage.setItem("token", data.token);
-        router.push("/chat");
+        const { data } = await response.json();
+        if (data && data.token) {
+          localStorage.setItem("token", data.token);
+          router.push("/chat");
+        } else {
+          setError(data.message || "Login failed");
+        }
       } else {
         const data = await response.json();
         setError(data.message || "Login failed");

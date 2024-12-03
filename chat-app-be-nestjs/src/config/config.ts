@@ -36,7 +36,7 @@ export default (): Config => {
   return {
     app: {
       env: nodeEnv,
-      port: parseInt(process.env.PORT ?? "3000")
+      port: parseInt(process.env.PORT ?? "3002")
     },
     jwt: {
       algorithm: (process.env.JWT_ALGORITHM ?? 'HS256') as Algorithm,
