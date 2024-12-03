@@ -25,10 +25,13 @@ export default function ChatRoom() {
 
     const newSocket = io(process.env.NEXT_PUBLIC_CHAT_WS_BASE_URL, {
       auth: { token },
+      extraHeaders: {
+        authorization: token,
+      },
     });
 
-    newSocket.on("connect_error", (err) => {
-      if (err.message === "AUTH_ERROR") {
+    newSocket.on("exception", (err) => {
+      if (err.code === "AUTH_ERROR") {
         localStorage.removeItem("token");
         router.push("/");
       }

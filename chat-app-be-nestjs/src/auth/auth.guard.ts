@@ -8,6 +8,8 @@ import { AuthService } from './auth.service';
 import { Reflector } from "@nestjs/core";
 import { SKIP_AUTH_GUARD } from "../core/decorators/skipauth.decorator";
 import { AuthRequest } from "../core/request/auth";
+import { Socket } from "socket.io";
+import { WsException } from "@nestjs/websockets";
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -23,22 +25,17 @@ export class AuthGuard implements CanActivate {
       return true;
     }
 
-    const httpContext = context.switchToHttp();
-    const request = httpContext.getRequest<AuthRequest>();
-
-    const [kind, token] = request.headers.authorization?.split(' ') ?? ['', ''];
-    if (kind.toLowerCase() !== 'bearer') {
-      throw new UnauthorizedException('Unexpected token kind.');
-    }
-
+    const wsContext = context.switchToWs();
+    const client = wsContext.getClient<Socket>()
+    const token = client.handshake.headers.authorization;
     if (!token) {
-      throw new UnauthorizedException('Missing token.');
+      throw new WsException({status: 'AUTH_ERROR', message: 'missing token'});
     }
 
     try {
-      request.authenticatedUser = await this.authService.verifyToken(token);
+      client['authenticatedUser'] = await this.authService.verifyToken(token);
     } catch {
-      throw new UnauthorizedException('Invalid token.');
+      throw new WsException({status: 'AUTH_ERROR', message: 'invalid token'});
     }
 
     return true;
