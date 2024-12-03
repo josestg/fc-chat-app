@@ -1,0 +1,24 @@
+services:
+  chat_app_nest_service:
+    container_name: chat_app_nest_service
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    environment:
+      DATABASE_HOST: chat_app_nest_be_postgres
+
+    links:
+      - chat_app_nest_be_postgres
+
+  chat_app_nest_be_postgres:
+    container_name: chat_app_nest_be_postgres
+    image: postgres:latest
+    restart: on-failure
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: chat-app-be-nest
+      POSTGRES_PASSWORD: chat-app-be-nest
+      POSTGRES_DB: chat-app-be-nest
