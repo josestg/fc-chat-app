@@ -29,7 +29,7 @@ export class AuthGuard implements CanActivate {
     const wsContext = context.switchToWs();
     const socket = wsContext.getClient<AuthSocket>()
 
-    const token = socket.handshake.headers.authorization
+    const { token } = socket.handshake.auth;
     if (!token) {
       throw new WsException({ code: "AUTH_ERROR", message: "Missing token." });
     }

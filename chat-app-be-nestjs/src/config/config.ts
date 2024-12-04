@@ -40,7 +40,7 @@ export default (): Config => {
     },
     jwt: {
       algorithm: (process.env.JWT_ALGORITHM ?? 'HS256') as Algorithm,
-      expires: process.env.JWT_EXPIRES ?? '15s',
+      expires: process.env.JWT_EXPIRES ?? '1h',
       issuer: process.env.JWT_ISSUER ?? 'chat-app-be-nest',
       audience: process.env.JWT_AUDIENCE ?? 'chat-app-be-nest',
       secret: process.env.JWT_SECRET ?? 'unsecure secret',
