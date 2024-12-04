@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import config, { DatabaseConfig, JWTConfig } from './config/config';
 import { JwtModule } from '@nestjs/jwt';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import { JwtModule } from '@nestjs/jwt';
         };
       },
     }),
+    ChatModule,
   ],
   controllers: [AppController],
   providers: [AppService],

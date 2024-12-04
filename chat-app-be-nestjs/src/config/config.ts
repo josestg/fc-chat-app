@@ -36,11 +36,11 @@ export default (): Config => {
   return {
     app: {
       env: nodeEnv,
-      port: parseInt(process.env.PORT ?? "3000")
+      port: parseInt(process.env.PORT ?? "3002")
     },
     jwt: {
       algorithm: (process.env.JWT_ALGORITHM ?? 'HS256') as Algorithm,
-      expires: process.env.JWT_EXPIRES ?? '1h',
+      expires: process.env.JWT_EXPIRES ?? '15s',
       issuer: process.env.JWT_ISSUER ?? 'chat-app-be-nest',
       audience: process.env.JWT_AUDIENCE ?? 'chat-app-be-nest',
       secret: process.env.JWT_SECRET ?? 'unsecure secret',

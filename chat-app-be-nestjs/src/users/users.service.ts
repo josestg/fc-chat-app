@@ -40,7 +40,6 @@ export class UsersService {
       return null;
     }
 
-    console.log(usr)
     const matched = bcrypt.compareSync(dto.password, usr.passwordHash);
     if (!matched) {
       return null;
