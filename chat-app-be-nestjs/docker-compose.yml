@@ -8,6 +8,7 @@ services:
       - '3000:3000'
     environment:
       DATABASE_HOST: chat_app_nest_be_postgres
+      JWT_EXPIRES: 1h
 
     links:
       - chat_app_nest_be_postgres
