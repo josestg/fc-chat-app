@@ -1,16 +1,27 @@
 services:
-  chat_app_nest_service:
-    container_name: chat_app_nest_service
-    build:
-      context: .
-      dockerfile: Dockerfile
+  chat_app_next_service:
+    container_name: chat_app_next_service
+    image: josestg/fc-chat-app-nextjs:1.0.0
     ports:
       - '3000:3000'
+    links:
+      - chat_app_nest_service
+    depends_on:
+      - chat_app_nest_service
+
+  chat_app_nest_service:
+    restart: always
+    container_name: chat_app_nest_service
+    image: josestg/fc-chat-app-service:1.0.0
+    ports:
+      - '3002:3002'
+      - '3003:3003'
     environment:
       DATABASE_HOST: chat_app_nest_be_postgres
       JWT_EXPIRES: 1h
-
     links:
+      - chat_app_nest_be_postgres
+    depends_on:
       - chat_app_nest_be_postgres
 
   chat_app_nest_be_postgres:
@@ -18,7 +29,7 @@ services:
     image: postgres:latest
     restart: on-failure
     ports:
-      - "5432:5432"
+      - '5432:5432'
     environment:
       POSTGRES_USER: chat-app-be-nest
       POSTGRES_PASSWORD: chat-app-be-nest
